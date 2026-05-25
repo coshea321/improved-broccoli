@@ -1,3 +1,6 @@
+const _excluded = ["practice"];
+function _objectWithoutProperties(e, t) { if (null == e) return {}; var o, r, i = _objectWithoutPropertiesLoose(e, t); if (Object.getOwnPropertySymbols) { var n = Object.getOwnPropertySymbols(e); for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]); } return i; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -1420,72 +1423,216 @@ function GrammarTab() {
   }, "\u25C8 Logic Pattern"), g.logic))))));
 }
 
+// ── PERSISTENCE HELPERS ───────────────────────────────────────────────────────
+const STORE_KEY = "greek-pwa-state-v1";
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+function saveState(patch) {
+  try {
+    const prev = loadState() || {};
+    localStorage.setItem(STORE_KEY, JSON.stringify({
+      ...prev,
+      ...patch
+    }));
+  } catch {/* storage full or unavailable */}
+}
+function clearPracticeState() {
+  try {
+    const prev = loadState() || {};
+    const _ = prev.practice,
+      rest = _objectWithoutProperties(prev, _excluded);
+    localStorage.setItem(STORE_KEY, JSON.stringify(rest));
+  } catch {}
+}
+
 // ── PRACTICE TAB ──────────────────────────────────────────────────────────────
 function PracticeTab() {
-  const _useState3 = useState("All"),
+  // ── Restore from localStorage on first mount ────────────────────────────
+  const saved = useMemo(() => {
+    const s = loadState();
+    return s && s.practice ? s.practice : null;
+  }, []);
+  const _useState3 = useState(saved ? saved.catFilter : "All"),
     _useState4 = _slicedToArray(_useState3, 2),
     catFilter = _useState4[0],
     setCatFilter = _useState4[1];
-  const _useState5 = useState(false),
+  const _useState5 = useState(saved ? saved.started : false),
     _useState6 = _slicedToArray(_useState5, 2),
     started = _useState6[0],
     setStarted = _useState6[1];
-  const _useState7 = useState([]),
+  const _useState7 = useState(saved ? saved.deck : []),
     _useState8 = _slicedToArray(_useState7, 2),
     deck = _useState8[0],
     setDeck = _useState8[1];
-  const _useState9 = useState(0),
+  const _useState9 = useState(saved ? saved.qIdx : 0),
     _useState0 = _slicedToArray(_useState9, 2),
     qIdx = _useState0[0],
     setQIdx = _useState0[1];
-  const _useState1 = useState([]),
+  const _useState1 = useState(saved ? saved.opts : []),
     _useState10 = _slicedToArray(_useState1, 2),
     opts = _useState10[0],
     setOpts = _useState10[1];
-  const _useState11 = useState(null),
+  const _useState11 = useState(saved ? saved.sel : null),
     _useState12 = _slicedToArray(_useState11, 2),
     sel = _useState12[0],
     setSel = _useState12[1];
-  const _useState13 = useState([]),
+  const _useState13 = useState(saved ? saved.history : []),
     _useState14 = _slicedToArray(_useState13, 2),
     history = _useState14[0],
     setHistory = _useState14[1];
-  const _useState15 = useState(false),
+  const _useState15 = useState(saved ? saved.done : false),
     _useState16 = _slicedToArray(_useState15, 2),
     done = _useState16[0],
     setDone = _useState16[1];
+  const _useState17 = useState(!!(saved && saved.started && !saved.done)),
+    _useState18 = _slicedToArray(_useState17, 2),
+    restored = _useState18[0],
+    setRestored = _useState18[1];
   const pool = catFilter === "All" ? VOCAB : VOCAB.filter(v => v.sf === catFilter);
+
+  // ── Persist every meaningful state change ───────────────────────────────
+  const persist = useCallback(patch => {
+    saveState({
+      practice: {
+        catFilter,
+        started,
+        deck,
+        qIdx,
+        opts,
+        sel,
+        history,
+        done,
+        ...patch
+      }
+    });
+  }, [catFilter, started, deck, qIdx, opts, sel, history, done]);
   const startSession = useCallback(() => {
     const d = shuffle(pool);
+    const newOpts = makeOptions(pool.length >= 4 ? pool : VOCAB, d[0]);
     setDeck(d);
     setQIdx(0);
-    setOpts(makeOptions(pool.length >= 4 ? pool : VOCAB, d[0]));
+    setOpts(newOpts);
     setSel(null);
     setHistory([]);
     setDone(false);
     setStarted(true);
-  }, [pool]);
+    setRestored(false);
+    saveState({
+      practice: {
+        catFilter,
+        started: true,
+        deck: d,
+        qIdx: 0,
+        opts: newOpts,
+        sel: null,
+        history: [],
+        done: false
+      }
+    });
+  }, [pool, catFilter]);
   const handleSelect = useCallback(opt => {
     if (sel !== null) return;
+    const correct = opt === deck[qIdx].meaning;
     setSel(opt);
-    setHistory(h => [...h, opt === deck[qIdx].meaning]);
-  }, [sel, deck, qIdx]);
+    setHistory(h => {
+      const next = [...h, correct];
+      persist({
+        sel: opt,
+        history: next
+      });
+      return next;
+    });
+  }, [sel, deck, qIdx, persist]);
   const handleNext = useCallback(() => {
     if (qIdx + 1 >= deck.length) {
       setDone(true);
+      persist({
+        done: true,
+        sel: null
+      });
       return;
     }
     const next = qIdx + 1;
+    const newOpts = makeOptions(pool.length >= 4 ? pool : VOCAB, deck[next]);
     setQIdx(next);
-    setOpts(makeOptions(pool.length >= 4 ? pool : VOCAB, deck[next]));
+    setOpts(newOpts);
     setSel(null);
-  }, [qIdx, deck, pool]);
+    persist({
+      qIdx: next,
+      opts: newOpts,
+      sel: null
+    });
+  }, [qIdx, deck, pool, persist]);
   const handleReset = useCallback(() => {
+    clearPracticeState();
     setStarted(false);
     setDone(false);
     setSel(null);
     setHistory([]);
+    setRestored(false);
   }, []);
+  const handleChangeCat = useCallback(f => {
+    setCatFilter(f);
+    saveState({
+      practice: {
+        catFilter: f,
+        started: false,
+        deck: [],
+        qIdx: 0,
+        opts: [],
+        sel: null,
+        history: [],
+        done: false
+      }
+    });
+  }, []);
+
+  // ── Restore banner (shown at top when resuming mid-session) ─────────────
+  const ResumeBanner = restored && started && !done ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14,
+      padding: "11px 16px",
+      background: "var(--greendim)",
+      border: "1px solid rgba(90,170,119,0.25)",
+      borderRadius: 10,
+      display: "flex",
+      alignItems: "center",
+      gap: 12,
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: "1rem"
+    }
+  }, "\u21A9"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: ".88rem",
+      fontWeight: 500,
+      color: "var(--green)"
+    }
+  }, "Session resumed"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: ".78rem",
+      color: "var(--muted)"
+    }
+  }, catFilter !== "All" ? catFilter : "Full deck", " \xB7 question ", qIdx + 1, " of ", deck.length, " · ", history.filter(Boolean).length, " correct so far")), /*#__PURE__*/React.createElement("button", {
+    className: "rbtn",
+    onClick: () => setRestored(false),
+    style: {
+      borderColor: "rgba(90,170,119,0.3)",
+      color: "var(--green)"
+    }
+  }, "Dismiss")) : null;
   if (!started) {
     return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
       className: "sec-hdr"
@@ -1511,7 +1658,7 @@ function PracticeTab() {
     }, FIELDS.map(f => /*#__PURE__*/React.createElement("button", {
       key: f,
       className: `fpill${catFilter === f ? " on" : ""}`,
-      onClick: () => setCatFilter(f)
+      onClick: () => handleChangeCat(f)
     }, f, " ", f !== "All" ? `(${VOCAB.filter(v => v.sf === f).length})` : `(${VOCAB.length})`)))), /*#__PURE__*/React.createElement("button", {
       className: "nxtbtn",
       onClick: startSession
@@ -1562,7 +1709,7 @@ function PracticeTab() {
     className: "sec-sub"
   }, "Semantic anchors shown after each answer")), /*#__PURE__*/React.createElement("div", {
     className: "pwrap"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, ResumeBanner, /*#__PURE__*/React.createElement("div", {
     className: "practice-top"
   }, /*#__PURE__*/React.createElement("div", {
     className: "scorebar"
@@ -1715,10 +1862,19 @@ function MethodTab() {
 
 // ── APP ROOT ──────────────────────────────────────────────────────────────────
 function App() {
-  const _useState17 = useState("method"),
-    _useState18 = _slicedToArray(_useState17, 2),
-    tab = _useState18[0],
-    setTab = _useState18[1];
+  const _useState19 = useState(() => {
+      const s = loadState();
+      return s && s.tab ? s.tab : "method";
+    }),
+    _useState20 = _slicedToArray(_useState19, 2),
+    tab = _useState20[0],
+    setTab = _useState20[1];
+  const handleTab = useCallback(id => {
+    setTab(id);
+    saveState({
+      tab: id
+    });
+  }, []);
   const tabs = [{
     id: "method",
     label: "How This Works"
@@ -1750,7 +1906,7 @@ function App() {
   }, tabs.map(t => /*#__PURE__*/React.createElement("button", {
     key: t.id,
     className: `nb${tab === t.id ? " on" : ""}`,
-    onClick: () => setTab(t.id)
+    onClick: () => handleTab(t.id)
   }, t.label))), /*#__PURE__*/React.createElement("div", {
     className: "main"
   }, tab === "method" && /*#__PURE__*/React.createElement(MethodTab, null), tab === "alphabet" && /*#__PURE__*/React.createElement(AlphabetTab, null), tab === "vocab" && /*#__PURE__*/React.createElement(VocabTab, null), tab === "grammar" && /*#__PURE__*/React.createElement(GrammarTab, null), tab === "practice" && /*#__PURE__*/React.createElement(PracticeTab, null)));

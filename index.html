@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Ελληνικά — Greek</title>
+
+  <!-- ── PWA Meta ── -->
+  <meta name="description" content="Greek language learning app for aphantasia & SDAM users. Etymology-based, pattern-first, no visualization mnemonics." />
+  <meta name="theme-color" content="#c9a227" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#c9a227" />
+  <meta name="color-scheme" content="dark" />
+
+  <!-- ── iOS / Apple ── -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Greek" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="apple-touch-startup-image" href="icon.svg" />
+
+  <!-- ── Manifest ── -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+
+  <!-- ── Open Graph ── -->
+  <meta property="og:title" content="Ελληνικά — Greek (Aphantasia Edition)" />
+  <meta property="og:description" content="Etymology-based Greek learning. No visualization mnemonics." />
+  <meta property="og:type" content="website" />
+
+  <!-- ── React & ReactDOM (UMD — cached by SW after first load) ── -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- ── Splash screen style (shows before JS loads) ── -->
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#0b0b13;--surface:#111120;--gold:#c9a227;--goldt:#e0b84a;
+      --text:#ece8df;--muted:#8a8699;--border:#252538;
+    }
+    html,body{background:var(--bg);min-height:100vh;color:var(--text);font-family:sans-serif;}
+    #root{min-height:100vh;}
+
+    /* Splash screen */
+    #splash{
+      position:fixed;inset:0;background:var(--bg);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      z-index:9999;transition:opacity .4s ease;
+    }
+    #splash.hidden{opacity:0;pointer-events:none;}
+    #splash-letter{
+      font-family:Georgia,serif;font-size:5rem;color:var(--goldt);
+      line-height:1;margin-bottom:16px;
+    }
+    #splash-title{font-family:Georgia,serif;font-size:1.4rem;color:var(--text);margin-bottom:6px;}
+    #splash-sub{font-size:.82rem;color:var(--muted);letter-spacing:.04em;}
+    #splash-dots{display:flex;gap:7px;margin-top:24px;}
+    #splash-dots span{
+      width:7px;height:7px;border-radius:50%;background:var(--border);
+      animation:pulse 1.2s ease-in-out infinite;
+    }
+    #splash-dots span:nth-child(2){animation-delay:.2s;}
+    #splash-dots span:nth-child(3){animation-delay:.4s;}
+    @keyframes pulse{0%,100%{background:var(--border);}50%{background:var(--gold);}}
+
+    /* Install banner */
+    #install-banner{
+      position:fixed;bottom:0;left:0;right:0;
+      background:var(--surface);border-top:1px solid var(--border);
+      padding:12px 18px;display:none;align-items:center;gap:12px;
+      z-index:8888;backdrop-filter:blur(10px);
+    }
+    #install-banner.show{display:flex;}
+    #install-banner .ib-icon{font-size:1.4rem;}
+    #install-banner .ib-text{flex:1;}
+    #install-banner .ib-title{font-size:.9rem;font-weight:500;color:var(--text);}
+    #install-banner .ib-sub{font-size:.75rem;color:var(--muted);}
+    #install-btn{
+      padding:8px 16px;background:var(--gold);color:#0b0b13;
+      border:none;border-radius:6px;font-weight:600;font-size:.85rem;
+      cursor:pointer;white-space:nowrap;
+    }
+    #install-btn:hover{background:var(--goldt);}
+    #dismiss-btn{
+      background:none;border:none;color:var(--muted);cursor:pointer;
+      font-size:1.2rem;padding:4px;line-height:1;
+    }
+
+    /* Offline toast */
+    #offline-toast{
+      position:fixed;top:12px;left:50%;transform:translateX(-50%) translateY(-80px);
+      background:#1a1a2b;border:1px solid var(--border);color:var(--muted);
+      padding:8px 18px;border-radius:20px;font-size:.82rem;
+      transition:transform .3s ease;z-index:9000;white-space:nowrap;
+    }
+    #offline-toast.show{transform:translateX(-50%) translateY(0);}
+
+    /* Update toast */
+    #update-toast{
+      position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(40px);
+      background:var(--surface);border:1px solid var(--gold);color:var(--text);
+      padding:10px 18px;border-radius:8px;font-size:.85rem;
+      display:none;align-items:center;gap:10px;z-index:9001;
+      opacity:0;transition:opacity .3s,transform .3s;
+    }
+    #update-toast.show{display:flex;opacity:1;transform:translateX(-50%) translateY(0);}
+    #update-btn{
+      background:var(--gold);color:#0b0b13;border:none;padding:4px 12px;
+      border-radius:4px;font-weight:600;font-size:.8rem;cursor:pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Splash screen -->
+  <div id="splash">
+    <div id="splash-letter">Α</div>
+    <div id="splash-title">Ελληνικά · Greek</div>
+    <div id="splash-sub">Aphantasia &amp; SDAM Edition</div>
+    <div id="splash-dots"><span></span><span></span><span></span></div>
+  </div>
+
+  <!-- Install banner (shown when PWA is installable) -->
+  <div id="install-banner">
+    <span class="ib-icon">📲</span>
+    <div class="ib-text">
+      <div class="ib-title">Install Greek App</div>
+      <div class="ib-sub">Works offline · no app store needed</div>
+    </div>
+    <button id="install-btn">Install</button>
+    <button id="dismiss-btn">✕</button>
+  </div>
+
+  <!-- Offline toast -->
+  <div id="offline-toast">📡 Offline — app still works</div>
+
+  <!-- Update available toast -->
+  <div id="update-toast">
+    <span>🔄 Update available</span>
+    <button id="update-btn">Reload</button>
+  </div>
+
+  <!-- React root -->
+  <div id="root"></div>
+
+  <!-- App (pre-compiled JSX → plain JS) -->
+  <script src="app.js"></script>
+
+  <!-- PWA Shell -->
+  <script>
+  (function() {
+
+    // ── Splash ────────────────────────────────────────────────────────────────
+    function hideSplash() {
+      var s = document.getElementById('splash');
+      if (s) { s.classList.add('hidden'); setTimeout(function(){s.remove();}, 500); }
+    }
+    // Hide splash once React has rendered (poll for content)
+    var splashCheck = setInterval(function() {
+      if (document.getElementById('root').children.length > 0) {
+        clearInterval(splashCheck);
+        hideSplash();
+      }
+    }, 50);
+    setTimeout(hideSplash, 4000); // hard fallback
+
+    // ── Offline / Online ──────────────────────────────────────────────────────
+    var toast = document.getElementById('offline-toast');
+    function showOfflineToast() {
+      toast.textContent = '📡 Offline — app still works from cache';
+      toast.classList.add('show');
+      setTimeout(function(){ toast.classList.remove('show'); }, 3000);
+    }
+    function showOnlineToast() {
+      toast.textContent = '✓ Back online';
+      toast.classList.add('show');
+      setTimeout(function(){ toast.classList.remove('show'); }, 2000);
+    }
+    window.addEventListener('offline', showOfflineToast);
+    window.addEventListener('online',  showOnlineToast);
+
+    // ── Install Prompt ────────────────────────────────────────────────────────
+    var deferredPrompt = null;
+    var banner = document.getElementById('install-banner');
+    var installBtn = document.getElementById('install-btn');
+    var dismissBtn = document.getElementById('dismiss-btn');
+
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      // Only show if not dismissed before
+      if (!localStorage.getItem('pwa-dismissed')) {
+        banner.classList.add('show');
+      }
+    });
+
+    installBtn.addEventListener('click', function() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(result) {
+        deferredPrompt = null;
+        banner.classList.remove('show');
+      });
+    });
+
+    dismissBtn.addEventListener('click', function() {
+      banner.classList.remove('show');
+      localStorage.setItem('pwa-dismissed', '1');
+    });
+
+    window.addEventListener('appinstalled', function() {
+      banner.classList.remove('show');
+      deferredPrompt = null;
+    });
+
+    // ── Service Worker ────────────────────────────────────────────────────────
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+          .then(function(reg) {
+            // Check for updates
+            reg.addEventListener('updatefound', function() {
+              var newWorker = reg.installing;
+              newWorker.addEventListener('statechange', function() {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  // New version available
+                  var ut = document.getElementById('update-toast');
+                  var ub = document.getElementById('update-btn');
+                  ut.classList.add('show');
+                  ub.addEventListener('click', function() {
+                    newWorker.postMessage('skipWaiting');
+                    window.location.reload();
+                  });
+                }
+              });
+            });
+          })
+          .catch(function(err) { console.warn('SW registration failed:', err); });
+
+        // Reload when SW is updated and takes control
+        var refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', function() {
+          if (!refreshing) { refreshing = true; window.location.reload(); }
+        });
+      });
+    }
+
+    // ── URL Hash routing helper (for shortcuts) ───────────────────────────────
+    // App uses internal state; this just triggers a custom event the app can listen to
+    if (window.location.hash) {
+      window.addEventListener('DOMContentLoaded', function() {
+        var hash = window.location.hash.replace('#', '');
+        window.dispatchEvent(new CustomEvent('pwa-shortcut', { detail: hash }));
+      });
+    }
+
+  })();
+  </script>
+
+</body>
+</html>

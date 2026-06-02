@@ -1,0 +1,22 @@
+{
+  "name": "Ελληνικά — Greek (Aphantasia Edition)",
+  "short_name": "Greek",
+  "description": "Greek language learning app designed for aphantasia & SDAM users. Etymology-based, pattern-first, no visualization mnemonics.",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b0b13",
+  "theme_color": "#c9a227",
+  "categories": ["education"],
+  "lang": "en",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Vocabulary", "url": "./#vocab",    "description": "Browse vocabulary" },
+    { "name": "Phrases",    "url": "./#phrases",  "description": "Useful phrases" },
+    { "name": "Roots",      "url": "./#roots",    "description": "Roots & prefixes" },
+    { "name": "Practice",   "url": "./#practice", "description": "Practice quiz" }
+  ]
+}

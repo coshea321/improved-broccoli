@@ -165,6 +165,37 @@ const CSS = `
   .mcard.on { border-color:var(--blue); }
   .mcard.on .mcard-title { color:var(--blue); }
   .count-badge { display:inline-block; padding:1px 8px; border-radius:20px; background:var(--golddim); color:var(--goldt); font-size:.72rem; font-family:var(--mfont); border:1px solid rgba(201,162,39,.2); margin-left:8px; vertical-align:middle; }
+
+  /* PHRASES */
+  .phrase-head { width:100%; display:flex; align-items:center; gap:12px; padding:15px 20px; background:rgba(255,255,255,.02); border:none; cursor:pointer; font-family:var(--bfont); text-align:left; transition:background .13s; }
+  .phrase-head:hover { background:rgba(255,255,255,.04); }
+  .phrase-icon { font-size:1.25rem; }
+  .phrase-title { font-family:var(--gfont); font-size:1.15rem; font-weight:600; color:var(--text); flex:1; }
+  .phrase-count { font-family:var(--mfont); font-size:.74rem; color:var(--muted); padding:1px 8px; border-radius:20px; background:rgba(255,255,255,.05); }
+  .phrase-chev { color:var(--gold); font-size:.9rem; width:14px; text-align:center; }
+  .phrase-body { padding:6px 12px 14px; display:flex; flex-direction:column; gap:8px; }
+  .phrase-item { padding:11px 14px; background:rgba(255,255,255,.02); border-radius:8px; border-left:3px solid var(--gold); }
+  .phrase-greek { font-family:var(--gfont); font-size:1.25rem; color:var(--goldt); line-height:1.2; }
+  .phrase-rom { font-family:var(--mfont); font-size:.78rem; color:var(--blue); margin-top:2px; }
+  .phrase-en { font-size:.92rem; color:var(--text); margin-top:3px; }
+  .phrase-note { font-size:.78rem; color:var(--muted); margin-top:4px; font-style:italic; }
+
+  /* ROOTS */
+  .roots-list { display:flex; flex-direction:column; gap:14px; }
+  .root-card { background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .root-head { padding:14px 18px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; border-bottom:1px solid var(--border); }
+  .root-blue .root-head { background:var(--bluedim); }
+  .root-gold .root-head { background:var(--golddim); }
+  .root-greek { font-family:var(--gfont); font-size:1.7rem; font-weight:600; color:var(--goldt); line-height:1; }
+  .root-blue .root-greek { color:var(--blue); }
+  .root-rom { font-family:var(--mfont); font-size:.85rem; color:var(--muted); }
+  .root-meaning { font-size:.95rem; color:var(--text); font-weight:500; margin-left:auto; }
+  .root-words { padding:12px 18px; display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:10px; }
+  .root-word { padding:10px 13px; background:rgba(255,255,255,.025); border-radius:8px; border:1px solid var(--border); }
+  .rw-en { font-size:1rem; font-weight:600; color:var(--text); margin-bottom:3px; }
+  .rw-build { font-size:.78rem; color:var(--muted); line-height:1.45; }
+  .rw-lit { font-size:.82rem; color:var(--goldt); margin-top:4px; font-style:italic; }
+  .root-blue .rw-lit { color:var(--blue); }
 `;
 
 // ── ALPHABET ──────────────────────────────────────────────────────────────────
@@ -1122,6 +1153,162 @@ const VOCAB = [
   },
   pattern: "'Ecology' = οἶκος + λόγος = the study of the natural household. 'Economy' = managing the household. Both share the 'home' root.",
   note: "Feminine: η οικονομία. Ancient meaning: household management → expanded to city/state/national economy."
+},
+// ── FAMILY ───────────────────────────────────────────────────────────────
+{
+  g: "μητέρα",
+  rom: "mitera",
+  pron: "mi-TE-ra",
+  meaning: "Mother",
+  sf: "Family",
+  etym: "Ancient μήτηρ. Root metr-/matr- → maternal, matriarch, matrix, matrimony. Also: metropolis = μήτηρ (mother) + πόλις (city) = mother-city!",
+  der: ["maternal", "matriarch", "matrix", "matrimony", "metropolis"],
+  ex: {
+    g: "Η μητέρα μου.",
+    r: "I mitera mou.",
+    e: "My mother."
+  },
+  pattern: "'Metropolis' literally = mother-city (μήτηρ + πόλις). The colony's home city was its 'mother'.",
+  note: "Feminine: η μητέρα. Informal/affectionate: μαμά (mama)."
+}, {
+  g: "πατέρας",
+  rom: "pateras",
+  pron: "pa-TE-ras",
+  meaning: "Father",
+  sf: "Family",
+  etym: "Ancient πατήρ. Root patr-/pater- → paternal, patriarch, patriot, patron, patronymic, expatriate.",
+  der: ["paternal", "patriarch", "patriot", "patron", "expatriate"],
+  ex: {
+    g: "Ο πατέρας μου.",
+    r: "O pateras mou.",
+    e: "My father."
+  },
+  pattern: "patr- = father → 'patriot' = one loyal to the fatherland. 'Patron' = a father-figure protector.",
+  note: "Masculine: ο πατέρας. Informal: μπαμπάς (babas = dad)."
+}, {
+  g: "αδερφός",
+  rom: "aderfos",
+  pron: "a-der-FOS",
+  meaning: "Brother",
+  sf: "Family",
+  etym: "Ancient ἀδελφός (from same womb). Root adelph- → Philadelphia = φίλος (loving) + ἀδελφός (brother) = 'city of brotherly love'.",
+  der: ["Philadelphia (brotherly love)", "Adelphi"],
+  ex: {
+    g: "Ο αδερφός μου.",
+    r: "O aderfos mou.",
+    e: "My brother."
+  },
+  pattern: "Philadelphia = philos + adelphos = brotherly love. αδερφή (aderfi) = sister (same root).",
+  note: "Masculine: ο αδερφός. Sister: η αδερφή. Also spelled αδελφός."
+},
+// ── COLORS ───────────────────────────────────────────────────────────────
+{
+  g: "άσπρο / λευκό",
+  rom: "aspro / lefko",
+  pron: "AS-pro / lef-KO",
+  meaning: "White",
+  sf: "Colors",
+  etym: "λευκό from ancient λευκός (bright, white). Root leuk-/leuc- → leukemia (white blood), leukocyte (white blood cell), leucine.",
+  der: ["leukemia", "leukocyte", "leucine"],
+  ex: {
+    g: "Άσπρο κρασί.",
+    r: "Aspro krasi.",
+    e: "White wine."
+  },
+  pattern: "'Leukemia' = λευκός (white) + αἷμα (blood) = white blood — describes the excess of white blood cells.",
+  note: "άσπρο = everyday white; λευκό = formal/literary white (e.g. Λευκός Οίκος = White House)."
+}, {
+  g: "μαύρο",
+  rom: "mavro",
+  pron: "MAV-ro",
+  meaning: "Black",
+  sf: "Colors",
+  etym: "From μαῦρος. The ancient word μέλας (black) gives English roots melan- → melancholy (black bile), melanin (dark pigment), melanoma.",
+  der: ["melancholy (black bile)", "melanin", "melanoma", "Melanesia"],
+  ex: {
+    g: "Μαύρος καφές.",
+    r: "Mavros kafes.",
+    e: "Black coffee."
+  },
+  pattern: "'Melancholy' = μέλας (black) + χολή (bile) — ancient medicine blamed sadness on 'black bile'. Melanin = dark skin pigment.",
+  note: "μαύρο is modern; μέλας is the ancient form behind the English derivatives."
+}, {
+  g: "χρυσός",
+  rom: "hrisos",
+  pron: "hri-SOS",
+  meaning: "Gold / Golden",
+  sf: "Colors",
+  etym: "Ancient χρυσός (gold). Root chrys- → chrysanthemum (golden flower), chrysalis (golden pupa), chrysolite.",
+  der: ["chrysanthemum (golden flower)", "chrysalis", "chrysolite"],
+  ex: {
+    g: "Χρυσό δαχτυλίδι.",
+    r: "Hriso dahtilidi.",
+    e: "A gold ring."
+  },
+  pattern: "'Chrysanthemum' = χρυσός (gold) + ἄνθεμον (flower) = golden flower. Chrysalis = the golden-colored pupa stage.",
+  note: "Also a common name: Χρύσα/Chrysa. χρυσή = feminine form."
+},
+// ── DESCRIBING THINGS ──────────────────────────────────────────────────────
+{
+  g: "μεγάλος",
+  rom: "megalos",
+  pron: "me-GA-los",
+  meaning: "Big / Large / Great",
+  sf: "Adjectives",
+  etym: "Ancient μέγας. Root mega-/megalo- → megaphone, megabyte, megalopolis, megalomania, omega (ō-mega = 'big O').",
+  der: ["megaphone", "megabyte", "megalopolis", "megalomania", "omega"],
+  ex: {
+    g: "Μεγάλο σπίτι.",
+    r: "Megalo spiti.",
+    e: "A big house."
+  },
+  pattern: "mega- = big/large everywhere: megaphone (big sound), megabyte (a million bytes), megalomania (delusions of grandeur).",
+  note: "Adjective endings change with gender: μεγάλος (masc), μεγάλη (fem), μεγάλο (neut)."
+}, {
+  g: "μικρός",
+  rom: "mikros",
+  pron: "mi-KROS",
+  meaning: "Small / Little",
+  sf: "Adjectives",
+  etym: "Ancient μικρός. Root micro- → microscope, microphone, microbe, microcosm, microwave, micron.",
+  der: ["microscope", "microphone", "microbe", "microcosm", "microwave"],
+  ex: {
+    g: "Μικρό παιδί.",
+    r: "Mikro pedi.",
+    e: "A small child."
+  },
+  pattern: "micro- = small everywhere. Microscope = small-viewer. Microbe = micro (small) + bios (life) = tiny life.",
+  note: "Gender forms: μικρός / μικρή / μικρό. The direct opposite of μεγάλος."
+}, {
+  g: "νέος",
+  rom: "neos",
+  pron: "NE-os",
+  meaning: "New / Young",
+  sf: "Adjectives",
+  etym: "Ancient νέος. Root neo- → neon (new gas), neolithic (new stone age), neophyte (newly planted), neoclassical.",
+  der: ["neon", "neolithic", "neophyte", "neoclassical", "neonatal"],
+  ex: {
+    g: "Νέο αυτοκίνητο.",
+    r: "Neo aftokinito.",
+    e: "A new car."
+  },
+  pattern: "neo- = new. Neon was named the 'new' gas (1898). Neophyte = neo (new) + phyton (plant) = a new convert.",
+  note: "Gender forms: νέος / νέα / νέο. Means both 'new' (objects) and 'young' (people)."
+}, {
+  g: "παλιός",
+  rom: "palios",
+  pron: "pa-LIOS",
+  meaning: "Old",
+  sf: "Adjectives",
+  etym: "Ancient παλαιός. Root paleo- → Paleolithic (old stone age), paleontology (study of ancient life), paleography.",
+  der: ["Paleolithic", "paleontology", "paleography", "Paleozoic"],
+  ex: {
+    g: "Παλιό βιβλίο.",
+    r: "Palio vivlio.",
+    e: "An old book."
+  },
+  pattern: "paleo- = old/ancient. Paleontology = paleo (ancient) + onta (beings) + logos (study) = study of ancient life.",
+  note: "Gender forms: παλιός / παλιά / παλιό. For people's age, use μεγάλος (big in years)."
 }];
 
 // ── GRAMMAR ───────────────────────────────────────────────────────────────────
@@ -1249,10 +1436,425 @@ const GRAMMAR = [{
   },
   insight: "Unlike English, no word inversion or auxiliary verb needed. Add ; at the end and raise your pitch. That is the complete rule.",
   logic: "Question words → sentence start: πού (where), τι (what), πότε (when), πώς (how), γιατί (why), ποιος/ποια (who), πόσο (how much). Everything else stays in statement order."
+}, {
+  id: "possessives",
+  title: "Possessives — 'My, Your, His' Come After the Noun",
+  sub: "Possessive word follows the noun (opposite of English order)",
+  rule: "In Greek, the possessive (my, your, his) comes AFTER the noun, not before. And the noun usually keeps its article. Pattern: [article] + [noun] + [possessive].",
+  table: {
+    heads: ["English", "Greek", "Literal order"],
+    rows: [{
+      cells: ["my friend", "ο φίλος μου", "the friend my"],
+      types: ["", "greek", ""]
+    }, {
+      cells: ["your house", "το σπίτι σου", "the house your"],
+      types: ["", "greek", ""]
+    }, {
+      cells: ["his/her name", "το όνομά του/της", "the name his/her"],
+      types: ["", "greek", ""]
+    }, {
+      cells: ["our city", "η πόλη μας", "the city our"],
+      types: ["", "greek", ""]
+    }, {
+      cells: ["their water", "το νερό τους", "the water their"],
+      types: ["", "greek", ""]
+    }]
+  },
+  insight: "The possessive set is short and fixed: μου (my), σου (your), του (his), της (her), μας (our), σας (your-pl), τους (their). Learn these 7 once; they never change form.",
+  logic: "Note μου/σου/του echo the verb endings (-μαι/-σαι patterns). These are unstressed and 'lean' onto the preceding word — linguists call them clitics. The noun keeps its article: 'the friend my'."
+}, {
+  id: "plurals",
+  title: "Making Plurals — Predictable Ending Swaps",
+  sub: "Each gender has a regular singular→plural ending change",
+  rule: "Plurals are formed by swapping the singular ending for a plural one, and the article also changes. Each gender follows its own consistent pattern.",
+  table: {
+    heads: ["Gender", "Singular", "Plural", "Ending change"],
+    rows: [{
+      cells: ["Masculine", "ο φίλος (the friend)", "οι φίλοι (the friends)", "-ος → -οι"],
+      types: ["", "greek", "greek", "mono"]
+    }, {
+      cells: ["Feminine", "η πόλη (the city)", "οι πόλεις (the cities)", "-η → -εις"],
+      types: ["", "greek", "greek", "mono"]
+    }, {
+      cells: ["Feminine", "η μέρα (the day)", "οι μέρες (the days)", "-α → -ες"],
+      types: ["", "greek", "greek", "mono"]
+    }, {
+      cells: ["Neuter", "το παιδί (the child)", "τα παιδιά (the children)", "-ι → -ιά"],
+      types: ["", "greek", "greek", "mono"]
+    }, {
+      cells: ["Neuter", "το βιβλίο (the book)", "τα βιβλία (the books)", "-ο → -α"],
+      types: ["", "greek", "greek", "mono"]
+    }]
+  },
+  insight: "The article tells you the plural too: ο/η → οι (masc/fem plural), το → τα (neuter plural). Learn the article shift first; the noun ending follows its gender's rule.",
+  logic: "Plural articles: οι (masc & fem), τα (neuter). This mirrors the singular 3-gender system (ο/η/το) collapsing into 2 plural forms (οι/τα). Fewer forms in plural than singular."
 }];
 
-// ── HELPERS ───────────────────────────────────────────────────────────────────
-const FIELDS = ["All", ...Array.from(new Set(VOCAB.map(v => v.sf)))];
+// ── PHRASES ───────────────────────────────────────────────────────────────────
+const PHRASES = [{
+  situation: "Meeting people",
+  icon: "🤝",
+  items: [{
+    g: "Πώς σε λένε;",
+    r: "Pos se lene?",
+    e: "What's your name?",
+    note: "lit. 'how do they call you?'"
+  }, {
+    g: "Με λένε...",
+    r: "Me lene...",
+    e: "My name is... (lit. 'they call me...')"
+  }, {
+    g: "Χαίρω πολύ.",
+    r: "Hero poli.",
+    e: "Pleased to meet you.",
+    note: "lit. 'I rejoice much'"
+  }, {
+    g: "Από πού είσαι;",
+    r: "Apo pou eise?",
+    e: "Where are you from?"
+  }, {
+    g: "Είμαι από...",
+    r: "Eime apo...",
+    e: "I am from..."
+  }, {
+    g: "Τι κάνεις;",
+    r: "Ti kanis?",
+    e: "How are you? (lit. 'what are you doing?')"
+  }, {
+    g: "Καλά, εσύ;",
+    r: "Kala, esi?",
+    e: "Fine, and you?"
+  }]
+}, {
+  situation: "At a café or taverna",
+  icon: "☕",
+  items: [{
+    g: "Θα ήθελα...",
+    r: "Tha ithela...",
+    e: "I would like...",
+    note: "polite ordering form"
+  }, {
+    g: "Έναν καφέ, παρακαλώ.",
+    r: "Enan kafe, parakalo.",
+    e: "A coffee, please."
+  }, {
+    g: "Τι προτείνετε;",
+    r: "Ti protinete?",
+    e: "What do you recommend?"
+  }, {
+    g: "Το λογαριασμό, παρακαλώ.",
+    r: "To logariasmo, parakalo.",
+    e: "The bill, please."
+  }, {
+    g: "Ήταν νόστιμο!",
+    r: "Itan nostimo!",
+    e: "It was delicious!",
+    note: "νόστιμο → 'nostalgia' shares νόστος (homecoming)"
+  }, {
+    g: "Στην υγειά μας!",
+    r: "Stin iya mas!",
+    e: "Cheers! (lit. 'to our health')",
+    note: "υγεία = root of 'hygiene'"
+  }]
+}, {
+  situation: "Getting around",
+  icon: "🧭",
+  items: [{
+    g: "Πού είναι...;",
+    r: "Pou eine...?",
+    e: "Where is...?"
+  }, {
+    g: "Πώς πάω στο κέντρο;",
+    r: "Pos pao sto kentro?",
+    e: "How do I get to the center?",
+    note: "κέντρο → 'center', 'centric'"
+  }, {
+    g: "Είναι μακριά;",
+    r: "Eine makria?",
+    e: "Is it far?"
+  }, {
+    g: "Είναι κοντά.",
+    r: "Eine konda.",
+    e: "It's near."
+  }, {
+    g: "Δεξιά / Αριστερά",
+    r: "Deksia / Aristera",
+    e: "Right / Left"
+  }, {
+    g: "Ευθεία",
+    r: "Efthia",
+    e: "Straight ahead"
+  }, {
+    g: "Χάθηκα.",
+    r: "Hathika.",
+    e: "I'm lost."
+  }]
+}, {
+  situation: "Shopping & money",
+  icon: "🛍️",
+  items: [{
+    g: "Πόσο κάνει;",
+    r: "Poso kani?",
+    e: "How much is it?"
+  }, {
+    g: "Πόσο κοστίζει;",
+    r: "Poso kostizi?",
+    e: "How much does it cost?",
+    note: "κοστίζει → 'cost'"
+  }, {
+    g: "Είναι ακριβό.",
+    r: "Eine akrivo.",
+    e: "It's expensive."
+  }, {
+    g: "Είναι φθηνό.",
+    r: "Eine ftino.",
+    e: "It's cheap."
+  }, {
+    g: "Θα το πάρω.",
+    r: "Tha to paro.",
+    e: "I'll take it."
+  }, {
+    g: "Μόνο κοιτάζω.",
+    r: "Mono kitazo.",
+    e: "I'm just looking."
+  }]
+}, {
+  situation: "Help & essentials",
+  icon: "🆘",
+  items: [{
+    g: "Βοήθεια!",
+    r: "Voithia!",
+    e: "Help!"
+  }, {
+    g: "Δεν καταλαβαίνω.",
+    r: "Den katalaveno.",
+    e: "I don't understand."
+  }, {
+    g: "Μιλάτε αγγλικά;",
+    r: "Milate anglika?",
+    e: "Do you speak English?"
+  }, {
+    g: "Μιλάτε πιο αργά, παρακαλώ.",
+    r: "Milate pio arga, parakalo.",
+    e: "Speak more slowly, please."
+  }, {
+    g: "Πού είναι η τουαλέτα;",
+    r: "Pou eine i toualeta?",
+    e: "Where is the toilet?"
+  }, {
+    g: "Χρειάζομαι έναν γιατρό.",
+    r: "Hriazome enan yatro.",
+    e: "I need a doctor.",
+    note: "γιατρό → 'pediatric', 'psychiatry'"
+  }]
+}];
+
+// ── ROOTS & PREFIXES (semantic-network builder) ───────────────────────────────
+const ROOTS = [{
+  root: "τηλε-",
+  romanized: "tele-",
+  meaning: "far, distant",
+  color: "blue",
+  words: [{
+    en: "telephone",
+    build: "tele (far) + φωνή phone (sound)",
+    lit: "far-sound"
+  }, {
+    en: "television",
+    build: "tele (far) + visio (Latin, sight)",
+    lit: "far-seeing"
+  }, {
+    en: "telescope",
+    build: "tele (far) + σκοπέω skopeo (look)",
+    lit: "far-looker"
+  }, {
+    en: "telegram",
+    build: "tele (far) + γράμμα gramma (writing)",
+    lit: "far-writing"
+  }, {
+    en: "telepathy",
+    build: "tele (far) + πάθος pathos (feeling)",
+    lit: "far-feeling"
+  }]
+}, {
+  root: "γραφ- / -γραμμα",
+  romanized: "graph- / -gram",
+  meaning: "write, draw, record",
+  color: "gold",
+  words: [{
+    en: "photograph",
+    build: "φῶς photo (light) + graph (write)",
+    lit: "light-writing"
+  }, {
+    en: "autograph",
+    build: "αὐτός auto (self) + graph (write)",
+    lit: "self-writing"
+  }, {
+    en: "paragraph",
+    build: "παρά para (beside) + graph (write)",
+    lit: "writing alongside"
+  }, {
+    en: "diagram",
+    build: "διά dia (through) + gram (drawing)",
+    lit: "drawn-through"
+  }, {
+    en: "grammar",
+    build: "γράμμα gramma (letter/writing)",
+    lit: "the art of letters"
+  }]
+}, {
+  root: "φων-",
+  romanized: "phon-",
+  meaning: "sound, voice",
+  color: "blue",
+  words: [{
+    en: "telephone",
+    build: "tele (far) + phone (sound)",
+    lit: "far-sound"
+  }, {
+    en: "symphony",
+    build: "σύν syn (together) + phone (sound)",
+    lit: "sounds together"
+  }, {
+    en: "microphone",
+    build: "μικρός micro (small) + phone (sound)",
+    lit: "small-sound device"
+  }, {
+    en: "megaphone",
+    build: "μέγας mega (big) + phone (sound)",
+    lit: "big-sound device"
+  }, {
+    en: "cacophony",
+    build: "κακός caco (bad) + phone (sound)",
+    lit: "bad-sound"
+  }]
+}, {
+  root: "σκοπ-",
+  romanized: "scop- / -scope",
+  meaning: "look at, examine",
+  color: "gold",
+  words: [{
+    en: "telescope",
+    build: "tele (far) + scope (look)",
+    lit: "far-looker"
+  }, {
+    en: "microscope",
+    build: "micro (small) + scope (look)",
+    lit: "small-looker"
+  }, {
+    en: "periscope",
+    build: "περί peri (around) + scope (look)",
+    lit: "look-around"
+  }, {
+    en: "stethoscope",
+    build: "στῆθος stetho (chest) + scope (look)",
+    lit: "chest-examiner"
+  }, {
+    en: "skeptic",
+    build: "σκεπτικός (examining, inquiring)",
+    lit: "one who examines"
+  }]
+}, {
+  root: "βιο-",
+  romanized: "bio-",
+  meaning: "life",
+  color: "blue",
+  words: [{
+    en: "biology",
+    build: "bio (life) + λόγος logos (study)",
+    lit: "study of life"
+  }, {
+    en: "biography",
+    build: "bio (life) + graph (write)",
+    lit: "life-writing"
+  }, {
+    en: "antibiotic",
+    build: "ἀντί anti (against) + bio (life)",
+    lit: "against (microbial) life"
+  }, {
+    en: "symbiosis",
+    build: "σύν syn (together) + bio (life)",
+    lit: "living together"
+  }, {
+    en: "amphibian",
+    build: "ἀμφί amphi (both) + bio (life)",
+    lit: "both-lives (land & water)"
+  }]
+}, {
+  root: "παθ-",
+  romanized: "path-",
+  meaning: "feeling, suffering, experience",
+  color: "gold",
+  words: [{
+    en: "sympathy",
+    build: "σύν syn (together) + path (feeling)",
+    lit: "feeling-with"
+  }, {
+    en: "empathy",
+    build: "ἐν en (in) + path (feeling)",
+    lit: "feeling-into"
+  }, {
+    en: "apathy",
+    build: "ἀ a (without) + path (feeling)",
+    lit: "without feeling"
+  }, {
+    en: "pathology",
+    build: "path (suffering) + λόγος logos",
+    lit: "study of suffering/disease"
+  }, {
+    en: "telepathy",
+    build: "tele (far) + path (feeling)",
+    lit: "far-feeling"
+  }]
+}, {
+  root: "αυτο-",
+  romanized: "auto-",
+  meaning: "self",
+  color: "blue",
+  words: [{
+    en: "automatic",
+    build: "auto (self) + (acting)",
+    lit: "self-acting"
+  }, {
+    en: "autonomy",
+    build: "auto (self) + νόμος nomos (law)",
+    lit: "self-rule"
+  }, {
+    en: "autograph",
+    build: "auto (self) + graph (write)",
+    lit: "self-writing"
+  }, {
+    en: "autobiography",
+    build: "auto (self) + bio (life) + graph",
+    lit: "self-life-writing"
+  }, {
+    en: "automobile",
+    build: "auto (self) + mobilis (Latin, moving)",
+    lit: "self-moving"
+  }]
+}, {
+  root: "μορφ-",
+  romanized: "morph-",
+  meaning: "form, shape",
+  color: "gold",
+  words: [{
+    en: "metamorphosis",
+    build: "μετά meta (change) + morph (form)",
+    lit: "change of form"
+  }, {
+    en: "morphology",
+    build: "morph (form) + λόγος logos",
+    lit: "study of form"
+  }, {
+    en: "amorphous",
+    build: "ἀ a (without) + morph (form)",
+    lit: "without form"
+  }, {
+    en: "anthropomorphic",
+    build: "ἄνθρωπος (human) + morph (form)",
+    lit: "human-shaped"
+  }]
+}];
 const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
 function makeOptions(pool, item) {
   const correct = item.meaning;
@@ -1423,6 +2025,94 @@ function GrammarTab() {
   }, "\u25C8 Logic Pattern"), g.logic))))));
 }
 
+// ── PHRASES TAB ───────────────────────────────────────────────────────────────
+function PhrasesTab() {
+  const _useState3 = useState(0),
+    _useState4 = _slicedToArray(_useState3, 2),
+    open = _useState4[0],
+    setOpen = _useState4[1];
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "sec-hdr"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "sec-title"
+  }, "Useful Phrases ", /*#__PURE__*/React.createElement("span", {
+    className: "count-badge"
+  }, PHRASES.reduce((n, p) => n + p.items.length, 0))), /*#__PURE__*/React.createElement("div", {
+    className: "sec-sub"
+  }, "Complete expressions for real situations \u2014 with romanization and etymology notes")), /*#__PURE__*/React.createElement("div", {
+    className: "aban"
+  }, /*#__PURE__*/React.createElement("strong", null, "Whole phrases, not just words."), " These are ready-to-use expressions grouped by situation. Each has a romanized pronunciation, and many include an etymology note linking a word to English vocabulary you already know \u2014 so the phrase attaches to your existing semantic network, not rote memory."), /*#__PURE__*/React.createElement("div", {
+    className: "glist"
+  }, PHRASES.map((group, gi) => /*#__PURE__*/React.createElement("div", {
+    className: "gcard",
+    key: gi
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "phrase-head",
+    onClick: () => setOpen(open === gi ? -1 : gi),
+    "aria-expanded": open === gi
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "phrase-icon"
+  }, group.icon), /*#__PURE__*/React.createElement("span", {
+    className: "phrase-title"
+  }, group.situation), /*#__PURE__*/React.createElement("span", {
+    className: "phrase-count"
+  }, group.items.length), /*#__PURE__*/React.createElement("span", {
+    className: "phrase-chev"
+  }, open === gi ? "▾" : "▸")), open === gi && /*#__PURE__*/React.createElement("div", {
+    className: "phrase-body"
+  }, group.items.map((it, ii) => /*#__PURE__*/React.createElement("div", {
+    className: "phrase-item",
+    key: ii
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "phrase-greek"
+  }, it.g), /*#__PURE__*/React.createElement("div", {
+    className: "phrase-rom"
+  }, it.r), /*#__PURE__*/React.createElement("div", {
+    className: "phrase-en"
+  }, it.e), it.note && /*#__PURE__*/React.createElement("div", {
+    className: "phrase-note"
+  }, "\u21B3 ", it.note))))))));
+}
+
+// ── ROOTS TAB ─────────────────────────────────────────────────────────────────
+function RootsTab() {
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "sec-hdr"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "sec-title"
+  }, "Roots & Prefixes ", /*#__PURE__*/React.createElement("span", {
+    className: "count-badge"
+  }, ROOTS.length, " roots")), /*#__PURE__*/React.createElement("div", {
+    className: "sec-sub"
+  }, "How one Greek root builds whole families of English words you already know")), /*#__PURE__*/React.createElement("div", {
+    className: "aban"
+  }, /*#__PURE__*/React.createElement("strong", null, "The most powerful tool for your memory type."), " You already know hundreds of English words built from Greek roots. This tab works backwards: learn one root (e.g. \u03C4\u03B7\u03BB\u03B5- = far) and instantly recognize it inside telephone, television, telescope, telegram. Pure semantic-network expansion \u2014 no imagery, no episodic memory, just connecting Greek to vocabulary already in your head."), /*#__PURE__*/React.createElement("div", {
+    className: "roots-list"
+  }, ROOTS.map((r, ri) => /*#__PURE__*/React.createElement("div", {
+    className: `root-card root-${r.color}`,
+    key: ri
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "root-head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "root-greek"
+  }, r.root), /*#__PURE__*/React.createElement("span", {
+    className: "root-rom"
+  }, r.romanized), /*#__PURE__*/React.createElement("span", {
+    className: "root-meaning"
+  }, "= ", r.meaning)), /*#__PURE__*/React.createElement("div", {
+    className: "root-words"
+  }, r.words.map((w, wi) => /*#__PURE__*/React.createElement("div", {
+    className: "root-word",
+    key: wi
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rw-en"
+  }, w.en), /*#__PURE__*/React.createElement("div", {
+    className: "rw-build"
+  }, w.build), /*#__PURE__*/React.createElement("div", {
+    className: "rw-lit"
+  }, "\"", w.lit, "\""))))))));
+}
+
 // ── PERSISTENCE HELPERS ───────────────────────────────────────────────────────
 const STORE_KEY = "greek-pwa-state-v1";
 function loadState() {
@@ -1458,42 +2148,42 @@ function PracticeTab() {
     const s = loadState();
     return s && s.practice ? s.practice : null;
   }, []);
-  const _useState3 = useState(saved ? saved.catFilter : "All"),
-    _useState4 = _slicedToArray(_useState3, 2),
-    catFilter = _useState4[0],
-    setCatFilter = _useState4[1];
-  const _useState5 = useState(saved ? saved.started : false),
+  const _useState5 = useState(saved ? saved.catFilter : "All"),
     _useState6 = _slicedToArray(_useState5, 2),
-    started = _useState6[0],
-    setStarted = _useState6[1];
-  const _useState7 = useState(saved ? saved.deck : []),
+    catFilter = _useState6[0],
+    setCatFilter = _useState6[1];
+  const _useState7 = useState(saved ? saved.started : false),
     _useState8 = _slicedToArray(_useState7, 2),
-    deck = _useState8[0],
-    setDeck = _useState8[1];
-  const _useState9 = useState(saved ? saved.qIdx : 0),
+    started = _useState8[0],
+    setStarted = _useState8[1];
+  const _useState9 = useState(saved ? saved.deck : []),
     _useState0 = _slicedToArray(_useState9, 2),
-    qIdx = _useState0[0],
-    setQIdx = _useState0[1];
-  const _useState1 = useState(saved ? saved.opts : []),
+    deck = _useState0[0],
+    setDeck = _useState0[1];
+  const _useState1 = useState(saved ? saved.qIdx : 0),
     _useState10 = _slicedToArray(_useState1, 2),
-    opts = _useState10[0],
-    setOpts = _useState10[1];
-  const _useState11 = useState(saved ? saved.sel : null),
+    qIdx = _useState10[0],
+    setQIdx = _useState10[1];
+  const _useState11 = useState(saved ? saved.opts : []),
     _useState12 = _slicedToArray(_useState11, 2),
-    sel = _useState12[0],
-    setSel = _useState12[1];
-  const _useState13 = useState(saved ? saved.history : []),
+    opts = _useState12[0],
+    setOpts = _useState12[1];
+  const _useState13 = useState(saved ? saved.sel : null),
     _useState14 = _slicedToArray(_useState13, 2),
-    history = _useState14[0],
-    setHistory = _useState14[1];
-  const _useState15 = useState(saved ? saved.done : false),
+    sel = _useState14[0],
+    setSel = _useState14[1];
+  const _useState15 = useState(saved ? saved.history : []),
     _useState16 = _slicedToArray(_useState15, 2),
-    done = _useState16[0],
-    setDone = _useState16[1];
-  const _useState17 = useState(!!(saved && saved.started && !saved.done)),
+    history = _useState16[0],
+    setHistory = _useState16[1];
+  const _useState17 = useState(saved ? saved.done : false),
     _useState18 = _slicedToArray(_useState17, 2),
-    restored = _useState18[0],
-    setRestored = _useState18[1];
+    done = _useState18[0],
+    setDone = _useState18[1];
+  const _useState19 = useState(!!(saved && saved.started && !saved.done)),
+    _useState20 = _slicedToArray(_useState19, 2),
+    restored = _useState20[0],
+    setRestored = _useState20[1];
   const pool = catFilter === "All" ? VOCAB : VOCAB.filter(v => v.sf === catFilter);
 
   // ── Persist every meaningful state change ───────────────────────────────
@@ -1862,13 +2552,13 @@ function MethodTab() {
 
 // ── APP ROOT ──────────────────────────────────────────────────────────────────
 function App() {
-  const _useState19 = useState(() => {
+  const _useState21 = useState(() => {
       const s = loadState();
       return s && s.tab ? s.tab : "method";
     }),
-    _useState20 = _slicedToArray(_useState19, 2),
-    tab = _useState20[0],
-    setTab = _useState20[1];
+    _useState22 = _slicedToArray(_useState21, 2),
+    tab = _useState22[0],
+    setTab = _useState22[1];
   const handleTab = useCallback(id => {
     setTab(id);
     saveState({
@@ -1884,6 +2574,12 @@ function App() {
   }, {
     id: "vocab",
     label: `Vocabulary (${VOCAB.length})`
+  }, {
+    id: "phrases",
+    label: "Phrases"
+  }, {
+    id: "roots",
+    label: "Roots"
   }, {
     id: "grammar",
     label: `Grammar (${GRAMMAR.length})`
@@ -1909,7 +2605,7 @@ function App() {
     onClick: () => handleTab(t.id)
   }, t.label))), /*#__PURE__*/React.createElement("div", {
     className: "main"
-  }, tab === "method" && /*#__PURE__*/React.createElement(MethodTab, null), tab === "alphabet" && /*#__PURE__*/React.createElement(AlphabetTab, null), tab === "vocab" && /*#__PURE__*/React.createElement(VocabTab, null), tab === "grammar" && /*#__PURE__*/React.createElement(GrammarTab, null), tab === "practice" && /*#__PURE__*/React.createElement(PracticeTab, null)));
+  }, tab === "method" && /*#__PURE__*/React.createElement(MethodTab, null), tab === "alphabet" && /*#__PURE__*/React.createElement(AlphabetTab, null), tab === "vocab" && /*#__PURE__*/React.createElement(VocabTab, null), tab === "phrases" && /*#__PURE__*/React.createElement(PhrasesTab, null), tab === "roots" && /*#__PURE__*/React.createElement(RootsTab, null), tab === "grammar" && /*#__PURE__*/React.createElement(GrammarTab, null), tab === "practice" && /*#__PURE__*/React.createElement(PracticeTab, null)));
 }
 // Render
 ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));

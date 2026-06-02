@@ -68,7 +68,10 @@ Users will see an "Update available" toast and can reload.
 ## App features
 
 - **24 alphabet letters** with IPA + phonetic descriptions + English cognates
-- **46 vocabulary words** across 9 semantic fields, filterable
-- **5 grammar patterns** as logical rule systems with tables
+- **56 vocabulary words** across 12 semantic fields, filterable
+- **30 useful phrases** grouped by real-life situation (meeting people, cafe, directions, shopping, help)
+- **8 root/prefix families** showing how one Greek root builds whole families of English words
+- **7 grammar patterns** as logical rule systems with tables
 - **Practice mode** with category filtering + spaced repetition
+- **Saves your place** — active tab and exact quiz position persist between sessions
 - All designed for **aphantasia** (no visualization mnemonics) and **SDAM** (semantic anchors, not episodic hooks)

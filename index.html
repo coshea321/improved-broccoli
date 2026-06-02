@@ -7,13 +7,12 @@
 
   <!-- ── PWA Meta ── -->
   <meta name="description" content="Greek language learning app for aphantasia & SDAM users. Etymology-based, pattern-first, no visualization mnemonics." />
-  <meta name="theme-color" content="#c9a227" media="(prefers-color-scheme: dark)" />
-  <meta name="theme-color" content="#c9a227" />
-  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#f4efe4" />
+  <meta name="color-scheme" content="light" />
 
   <!-- ── iOS / Apple ── -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Greek" />
   <link rel="apple-touch-icon" href="icon.svg" />
   <link rel="apple-touch-startup-image" href="icon.svg" />
@@ -35,8 +34,8 @@
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --bg:#0b0b13;--surface:#111120;--gold:#c9a227;--goldt:#e0b84a;
-      --text:#ece8df;--muted:#8a8699;--border:#252538;
+      --bg:#f4efe4;--surface:#ffffff;--gold:#a87d14;--goldt:#896213;
+      --text:#2b2720;--muted:#79705f;--border:#e6dfce;
     }
     html,body{background:var(--bg);min-height:100vh;color:var(--text);font-family:sans-serif;}
     #root{min-height:100vh;}
@@ -76,7 +75,7 @@
     #install-banner .ib-title{font-size:.9rem;font-weight:500;color:var(--text);}
     #install-banner .ib-sub{font-size:.75rem;color:var(--muted);}
     #install-btn{
-      padding:8px 16px;background:var(--gold);color:#0b0b13;
+      padding:8px 16px;background:var(--gold);color:#fffdf8;
       border:none;border-radius:6px;font-weight:600;font-size:.85rem;
       cursor:pointer;white-space:nowrap;
     }
@@ -89,7 +88,7 @@
     /* Offline toast */
     #offline-toast{
       position:fixed;top:12px;left:50%;transform:translateX(-50%) translateY(-80px);
-      background:#1a1a2b;border:1px solid var(--border);color:var(--muted);
+      background:#ffffff;border:1px solid var(--border);color:var(--muted);
       padding:8px 18px;border-radius:20px;font-size:.82rem;
       transition:transform .3s ease;z-index:9000;white-space:nowrap;
     }
@@ -105,7 +104,7 @@
     }
     #update-toast.show{display:flex;opacity:1;transform:translateX(-50%) translateY(0);}
     #update-btn{
-      background:var(--gold);color:#0b0b13;border:none;padding:4px 12px;
+      background:var(--gold);color:#fffdf8;border:none;padding:4px 12px;
       border-radius:4px;font-weight:600;font-size:.8rem;cursor:pointer;
     }
   </style>

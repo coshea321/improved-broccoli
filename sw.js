@@ -1,5 +1,5 @@
 // ── Greek PWA Service Worker ──────────────────────────────────────────────────
-const CACHE   = 'greek-pwa-v3';
+const CACHE   = 'greek-pwa-v4';
 const RUNTIME = 'greek-runtime-v1';
 
 // Core app shell — cached on install

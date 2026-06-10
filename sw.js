@@ -1,84 +1,64 @@
-// ── Greek PWA Service Worker ──────────────────────────────────────────────────
-const CACHE   = 'greek-pwa-v4';
-const RUNTIME = 'greek-runtime-v1';
+// ── Single source of truth — bump this and everything updates ──
+const VERSION = 'v185 · 10/06/2026 13:22';
+const CACHE   = 'hearth-' + VERSION;
 
-// Core app shell — cached on install
-const PRECACHE = [
+const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './app.js',
-  './icon.svg',
-  './icon-maskable.svg',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
-// CDN assets — cached on first use
-const CDN_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com', 'unpkg.com'];
-
-// ── Install: pre-cache app shell ──────────────────────────────────────────────
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE)
-      .then(cache => cache.addAll(PRECACHE))
-      .then(() => self.skipWaiting())
+// Install: cache all assets, skip waiting immediately
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(CACHE).then(c => c.addAll(ASSETS))
   );
+  self.skipWaiting();
 });
 
-// ── Activate: clean old caches ────────────────────────────────────────────────
-self.addEventListener('activate', event => {
-  const current = [CACHE, RUNTIME];
-  event.waitUntil(
+// Activate: delete old caches, take control, tell pages to reload + send version
+self.addEventListener('activate', e => {
+  e.waitUntil(
     caches.keys()
       .then(keys => Promise.all(
-        keys.filter(k => !current.includes(k)).map(k => caches.delete(k))
+        keys.filter(k => k !== CACHE).map(k => caches.delete(k))
       ))
       .then(() => self.clients.claim())
-  );
-});
-
-// ── Fetch: cache strategies ───────────────────────────────────────────────────
-self.addEventListener('fetch', event => {
-  const url = new URL(event.request.url);
-
-  // App shell — cache first
-  if (PRECACHE.some(p => event.request.url.endsWith(p.replace('./', '')))) {
-    event.respondWith(
-      caches.match(event.request).then(r => r || fetch(event.request))
-    );
-    return;
-  }
-
-  // CDN / fonts — stale while revalidate
-  if (CDN_HOSTS.includes(url.hostname)) {
-    event.respondWith(
-      caches.open(RUNTIME).then(cache =>
-        cache.match(event.request).then(cached => {
-          const network = fetch(event.request).then(res => {
-            if (res.ok) cache.put(event.request, res.clone());
-            return res;
-          }).catch(() => cached); // offline fallback to stale
-          return cached || network;
-        })
-      )
-    );
-    return;
-  }
-
-  // Everything else — network first, cache fallback
-  event.respondWith(
-    fetch(event.request)
-      .then(res => {
-        if (res.ok) {
-          const clone = res.clone();
-          caches.open(RUNTIME).then(c => c.put(event.request, clone));
-        }
-        return res;
+      .then(() => self.clients.matchAll({ type: 'window' }))
+      .then(clients => {
+        clients.forEach(client => client.postMessage({ type: 'SW_UPDATED', version: VERSION }));
       })
-      .catch(() => caches.match(event.request))
   );
 });
 
-// ── Background sync placeholder ───────────────────────────────────────────────
-self.addEventListener('message', event => {
-  if (event.data === 'skipWaiting') self.skipWaiting();
+// Respond to version requests from the page
+self.addEventListener('message', e => {
+  if (e.data && e.data.type === 'GET_VERSION') {
+    e.source.postMessage({ type: 'SW_VERSION', version: VERSION });
+  }
+});
+
+// Fetch: cache-first for same-origin assets, but never cache sw.js itself
+self.addEventListener('fetch', e => {
+  const url = new URL(e.request.url);
+  // Never intercept requests for the SW file itself
+  // Never cache sw.js or index.html — always fetch fresh
+  if (url.pathname.endsWith('/sw.js')) return;
+  if (url.pathname.endsWith('/') || url.pathname.endsWith('/index.html')) return;
+  if (url.origin === self.location.origin) {
+    e.respondWith(
+      caches.match(e.request).then(cached => {
+        if (cached) return cached;
+        return fetch(e.request).then(response => {
+          if (response && response.status === 200) {
+            const clone = response.clone();
+            caches.open(CACHE).then(c => c.put(e.request, clone));
+          }
+          return response;
+        });
+      })
+    );
+  }
 });
